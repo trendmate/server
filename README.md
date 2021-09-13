@@ -39,7 +39,7 @@ pytest
 
 ## Datasets
 
-### (Amazon)[https://nijianmo.github.io/amazon/index.html]
+### [Amazon](https://nijianmo.github.io/amazon/index.html)
 
 ```
 reviewerID - ID of the reviewer, e.g. A2SUAM1J3GNN3B
