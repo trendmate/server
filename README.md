@@ -1,3 +1,17 @@
+## Git workflow
+
+```
+git checkout <individual branch>
+git pull origin master
+do your work
+git add .
+git commit -m "useful commit message"
+git push
+make a PR on github
+test
+Merge
+```
+
 ## Getting started
 
 ```
