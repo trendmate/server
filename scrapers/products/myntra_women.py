@@ -1,6 +1,6 @@
 from selenium import webdriver
 import csv
-from random import random
+from random import randint, random
 
 DRIVER_PATH = 'E:\ChromeDriver\chromedriver_win32\chromedriver.exe'
 driver = webdriver.Chrome(executable_path=DRIVER_PATH)
@@ -35,7 +35,7 @@ WesternWear = [
 
 # dictionary = {}
 headers = ['gender', 'category', 'image',
-           'brand', 'description', 'price', 'rating']
+           'brand', 'description', 'price', 'rating', 'reviews']
 
 
 with open('myntra_women.csv', 'a', newline='') as f:
@@ -86,8 +86,9 @@ with open('myntra_women.csv', 'a', newline='') as f:
                 except:
                     pass
                 rating = round((random() * 2) + 3, 1)
+                reviews = randint(1, 12500)
                 w.writerow([gender, category, imageURL,
-                            brand, description, price, rating])
+                            brand, description, price, rating, reviews])
             print("done")
 
             # w.writerows(rows)
