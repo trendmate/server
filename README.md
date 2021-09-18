@@ -2,7 +2,7 @@
 
 ```
 git checkout <individual branch>
-git pull origin master
+git pull origin main
 do your work
 git add .
 git commit -m "useful commit message"
