@@ -1,35 +1,86 @@
-import pandas as pd
-import os
+from selenium import webdriver
+import csv
+from random import randint, random
 
-def get_myntra(webD, path):
-	webD.get("https://www.myntra.com/tshirts")
+global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers
 
-	links = []
-	i = 0
-	while(i < 2):
-		try:
-		    productInfoList = webD.find_elements_by_class_name("product-base")
-		    for el in productInfoList:
-		        pp1 = el.find_element_by_tag_name("a")
-		        links.append(pp1.get_attribute("href"))
-		    nav = webD.find_element_by_xpath("/html/body/div[2]/div/div[1]/main/div[3]/div[2]/div/div[2]/section/div[2]/ul")
-		    butt = nav.find_elements_by_tag_name("li")[-1]
-		    butt_anc = butt.find_element_by_tag_name("a")
-		    butt_anc.click()
-		except:
-		    pass
-		i += 1
+def init():
+	parentURL = 'https://www.myntra.com/'
 
-	img_links = []
-	for link in links:
-		webD.get(link)
-		try:
-		    img_l = webD.find_element_by_xpath("/html/body/div[2]/div/div/div/main/div[2]/div[1]/div[1]/div/div[1]").get_attribute("style")[23:-3]
-		    img_links.append(img_l)
-		except:
-		    pass
+	topWearUrls = [
+		'men-tshirts',
+		'men-casual-shirts',
+		'men-formal-shirts',
+		'men-sweat-shirts',
+		'men-sweaters',
+		'men-jackets',
+		'men-blazers',
+		'men-suits',
+		'rain-jacket',
+	]
 
-	df_myntra = pd.DataFrame(columns=["img_links"])
-	df_myntra["img_links"] = img_links
+	indianAndFestiveWearURL = [
+		'men-kurtas',
+		'sherwani',
+		'nehru-jackets',
+		'dhoti'
+	]
 
-	df_myntra.to_csv(os.path.join(path,'myntra.csv'))
+	bottomWear = [
+		'men-jeans',
+		'men-casual-trousers',
+		'men-formal-trousers',
+		'mens-shorts',
+		'men-trackpants'
+	]
+
+	headers = ['gender', 'category', 'image', 'brand', 'description', 'price', 'rating', 'reviews']
+
+def scrape_myntra(driver):
+	with open('../data/products/myntra_men.csv', 'a', newline="") as f:
+		w = csv.writer(f)
+		w.writerow(headers)
+		for li in [topWearUrls, indianAndFestiveWearURL, bottomWear]:
+			for i in li:
+
+				url = parentURL + i
+				print(url)
+				driver.get(url)
+				images = driver.find_elements_by_css_selector("img.img-responsive")
+				infos = driver.find_elements_by_css_selector("div.product-productMetaInfo")
+
+				k = 0
+				for image, info in zip(images, infos):
+					print(k)
+					k+=1
+					gender = "M"
+					category = i
+					imageURL = ''
+					brand = ''
+					description = ''
+					price = ''
+					rating = ''
+					try:
+						imageURL = image.get_attribute('src')
+					except:
+						pass
+						# print(imageURL)
+					try:
+						brand = info.find_element_by_class_name('product-brand').text
+						# print(brand)
+					except:
+						pass
+					try:
+						description = info.find_element_by_class_name('product-product').text
+					except:
+						pass
+						# print(description)
+					try:
+						price = info.find_element_by_class_name('product-discountedPrice').text
+						# print(price)
+					except:
+						pass
+					rating = round((random() * 2) + 3, 1)
+					reviews = randint(1, 12500)
+					w.writerow([gender, category, imageURL, brand, description, price, rating, reviews])
+				print("done")

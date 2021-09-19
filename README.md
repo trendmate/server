@@ -53,6 +53,8 @@ pytest
 
 ## Datasets
 
+### [Scraped Images](https://drive.google.com/file/d/1WI95J600swejVn2-6vzhFRuxKfZa_gQh/view?usp=sharing)
+
 ### [Amazon](https://nijianmo.github.io/amazon/index.html)
 
 ```
