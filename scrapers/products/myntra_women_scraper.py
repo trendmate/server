@@ -154,7 +154,7 @@ def myntra_men_scraper():
 
     driver.quit()
 
-    with open('myntra_women.csv', 'a', newline='') as f:
+    with open('../data/products_data/myntra_women.csv', 'a', newline='') as f:
         w = csv.writer(f)
         w.writerow(headers)
         w.writerows(rows)
