@@ -11,6 +11,7 @@ import pandas as pd
 global urls, brand_names, Description, Rating, Category, Discount, Link, Rate
 
 def init():
+    global urls, brand_names, Description, Rating, Category, Discount, Link, Rate
     urls=['https://www.amazon.in/s?i=apparel&bbn=1968120031&rh=n%3A1571271031%2Cn%3A1968024031%2Cn%3A1968120031%2Cp_85%3A10440599031%2Cp_72%3A1318476031&s=apparels&dc&pf_rd_i=1968024031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=7ad3f8fa-3670-4f37-8514-6e5bf1c9ad3e&pf_rd_r=E6PP7PBNCKCV9PKR323W&pf_rd_s=merchandised-search-3&qid=1627972541&rnid=1318475031&ref=sr_nr_p_72_1',
         'https://www.amazon.in/s?i=apparel&bbn=1968094031&rh=n%3A1571271031%2Cn%3A1968024031%2Cn%3A1968093031%2Cn%3A1968094031%2Cp_85%3A10440599031%2Cp_72%3A1318476031&s=apparels&dc&pf_rd_i=1968024031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=7ad3f8fa-3670-4f37-8514-6e5bf1c9ad3e&pf_rd_r=E6PP7PBNCKCV9PKR323W&pf_rd_s=merchandised-search-3&qid=1627972580&rnid=1318475031&ref=sr_nr_p_72_1',
         'https://www.amazon.in/s?i=apparel&bbn=1968076031&rh=n%3A1968076031%2Cp_85%3A10440599031%2Cp_72%3A1318476031&s=apparels&dc&pf_rd_i=1968024031&pf_rd_m=A1VBAL9TL5WCBF&pf_rd_p=7ad3f8fa-3670-4f37-8514-6e5bf1c9ad3e&pf_rd_r=E6PP7PBNCKCV9PKR323W&pf_rd_s=merchandised-search-3&qid=1627972606&rnid=1318475031&ref=sr_nr_p_72_1',
@@ -31,6 +32,7 @@ def init():
             Category.append(j)
 
 def scrape_amazon(driver):
+    global urls, brand_names, Description, Rating, Category, Discount, Link, Rate
     for url in urls:
         driver.get(url)
         for i in range(2,50):
