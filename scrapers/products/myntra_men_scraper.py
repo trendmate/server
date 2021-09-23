@@ -9,20 +9,21 @@ import time
 global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows
 
 def init():
+    global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows
         
     parentURL = 'https://www.myntra.com/'
 
 
     topWearUrls = [
         'men-tshirts',
-        'men-casual-shirts',
-        'men-formal-shirts',
-        'men-sweat-shirts',
-        'men-sweaters',
-        'men-jackets',
-        'men-blazers',
-        'men-suits',
-        'rain-jacket',
+        # 'men-casual-shirts',
+        # 'men-formal-shirts',
+        # 'men-sweat-shirts',
+        # 'men-sweaters',
+        # 'men-jackets',
+        # 'men-blazers',
+        # 'men-suits',
+        # 'rain-jacket',
     ]
 
     indianAndFestiveWearURL = [
@@ -46,8 +47,10 @@ def init():
 
     rows = []
 
-def myntra_men_scraper():
-    for li in [topWearUrls, indianAndFestiveWearURL, bottomWear]:
+def scrape(driver):
+    global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows
+    for li in [topWearUrls]:
+    # indianAndFestiveWearURL, bottomWear]:
         for i in li:
 
             url = parentURL + i
@@ -55,7 +58,7 @@ def myntra_men_scraper():
             driver.get(url)
             time.sleep(10)
             products = driver.find_elements_by_class_name("product-base")
-
+            products = [products[0]]
             k = 0
             URLS = []
             for product in products:
@@ -152,10 +155,7 @@ def myntra_men_scraper():
                 driver.back()
                 time.sleep(3)
 
-
-    driver.quit()
-
-    with open('../data/products_data/myntra_men.csv', 'a', newline='') as f:
+    with open('./data/products_data/myntra_men.csv', 'a', newline='\n') as f:
         w = csv.writer(f)
-        w.writerow(headers)
+        # w.writerow(headers)
         w.writerows(rows)
