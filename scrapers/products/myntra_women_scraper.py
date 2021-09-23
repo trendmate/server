@@ -46,7 +46,7 @@ def init():
     rows = []
 
 
-def myntra_men_scraper():
+def scrape(driver):
     for li in [indianAndFusionWear, WesternWear]:
         for i in li:
 
