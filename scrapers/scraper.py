@@ -1,5 +1,5 @@
 import selenium
-# from pyvirtualdisplay import Display
+from pyvirtualdisplay import Display
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import scrapers.products.amazon_scraper as amazon
@@ -10,7 +10,7 @@ import scrapers.blogs.vogue as vogue
 global display, driver
 
 def init():
-    # display = Display(visible=0, size=(1920, 1080)).start()
+    display = Display(visible=0, size=(1920, 1080)).start()
     global driver
     driver=webdriver.Chrome(ChromeDriverManager().install())
     # amazon.init()
