@@ -115,7 +115,7 @@ with open('vogue.csv', 'a', newline="") as f:
             pass
         try:
             img3 = driver.find_element_by_xpath(
-                f'//*[@id="post-{id}"]/div[1]/div/div/div[1]/img').get_attribute('src')
+                f'//*[@id="post-{id}"]/div[1]/div/div/div[1]/img').get_attribute('data-original')
         except:
             pass
         
