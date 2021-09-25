@@ -1,8 +1,8 @@
 from selenium import webdriver
 import csv
+from webdriver_manager.chrome import ChromeDriverManager
 
-DRIVER_PATH = 'E:\ChromeDriver\chromedriver_win32\chromedriver.exe'
-driver = webdriver.Chrome(executable_path=DRIVER_PATH)
+driver = webdriver.Chrome(ChromeDriverManager().install())
 
 dictionary = {
     "https://www.vogue.in/vogue-closet/collection/kiara-advanis-smocked-dress-is-all-the-rage-in-sage/": "1150434",
