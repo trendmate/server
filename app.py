@@ -17,6 +17,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 
 # ours
 import scrapers.scraper as scraper
+import server.articles as articles
 
 # firebase
 import firebase_admin
@@ -116,6 +117,23 @@ def flow():
         u'trendiness': np.argmax(score).item(),
     })
 
+def add_articles():
+    res = articles.sort_articles()
+    print(res)
+    for x in range(0,len(res)):
+        doc_ref = db.collection(u'trending_articles').document()
+        doc_ref.set({
+            u'heading': res.iloc[x]['heading'],
+            u'author': res.iloc[x]['author'],
+            u'datetime': res.iloc[x]['datetime'],
+            u'below_title_summary': res.iloc[x]['below_title_summary'],
+            u'img': res.iloc[x]['img'],
+            u'description': res.iloc[x]['description'],
+            u'img2': res.iloc[x]['img2'],
+            u'description2': res.iloc[x]['description2'],
+            u'trendiness': res.iloc[x]['trendiness'],
+        })
+
 
 def init():
     global model
@@ -129,5 +147,6 @@ def init():
 
 
 if __name__ == '__main__':
-    init()
+    # init()
+    add_articles()
     app.run()
