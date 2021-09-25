@@ -136,10 +136,10 @@ def add_articles():
 
 
 def init():
-    global model
-    model = tf.keras.models.load_model('./models/vgg/')
+    # global model
+    # model = tf.keras.models.load_model('./models/vgg/')
     scraper.init()
-    flow()
+    # flow()
     # scheduler = BackgroundScheduler()
     # scheduler.add_job(func=flow, trigger="interval", hours=24)
     # scheduler.start()
@@ -148,5 +148,6 @@ def init():
 
 if __name__ == '__main__':
     # init()
+    # scraper.scrape()
     add_articles()
     app.run()

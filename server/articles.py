@@ -21,7 +21,7 @@ def get_hotwords(text):
     return result
 
 def sort_articles():
-    df = pd.read_csv('./data/blog_data/example_vogue.csv')
+    df = pd.read_csv('./data/blog_data/vogue.csv')
     text= []
     for index, row in df.iterrows():
         strin = row['heading'] + ' ' + row['author'] + ' ' + row['below_title_summary'] + ' ' + row['description'] + ' ' + row['description2']
