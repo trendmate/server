@@ -1,7 +1,7 @@
 ## Hosting
 
 ```
-git chekcout main
+git checkout main
 git pull 
 git checkout hosting
 git checkout master -- config

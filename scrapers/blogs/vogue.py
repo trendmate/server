@@ -138,3 +138,17 @@ def scrape(driver):
                     f'//*[@id="post-{id}"]/div[3]/ul[2]/li[2]/a').text
             except:
                 pass
+
+            w.writerow([heading.encode("ascii", "ignore").decode(),
+                    author.encode("ascii", "ignore").decode(),
+                    datetime.encode("ascii", "ignore").decode(),
+                    below_title_summary.encode("ascii", "ignore").decode(),
+                    img.encode("ascii", "ignore").decode(),
+                    description.encode("ascii", "ignore").decode(),
+                    img2.encode("ascii", "ignore").decode(),
+                    description2.encode("ascii", "ignore").decode(),
+                    img3.encode("ascii", "ignore").decode(),
+                    description3.encode("ascii", "ignore").decode(),
+                    celebrity.encode("ascii", "ignore").decode(),
+                    price.encode("ascii", "ignore").decode(),
+                    occasion.encode("ascii", "ignore").decode()])
