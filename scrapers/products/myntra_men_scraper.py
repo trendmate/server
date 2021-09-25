@@ -58,7 +58,7 @@ def scrape(driver):
             driver.get(url)
             time.sleep(10)
             products = driver.find_elements_by_class_name("product-base")
-            products = [products[0]]
+            # products = [products[0]]
             k = 0
             URLS = []
             for product in products:
@@ -77,11 +77,12 @@ def scrape(driver):
                     URLS.append(product.find_element_by_tag_name(
                         'a').get_attribute('href'))
                     url = URLS[k]
+
                 except:
                     URLS.append('')
                     url = URLS[k]
                     pass
-
+                print(url)
                 try:
                     imageURL = driver.find_element_by_xpath(
                         f'//*[@id="desktopSearchResults"]/div[2]/section/ul/li[{str(k + 1)}]/a/div[1]/div/div/div/picture/img').get_attribute('src')
