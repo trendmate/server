@@ -147,7 +147,7 @@ def init():
 
 
 if __name__ == '__main__':
-    # init()
-    # scraper.scrape()
+    init()
+    scraper.scrape()
     add_articles()
     app.run()
