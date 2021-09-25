@@ -63,28 +63,28 @@ class voguescraper:
         return text_corpus
 
 
-def get_vogue(webD, path):
-	webD.get("https://www.vogue.in/vogue-closet/?closet=vogue_closet&filter_type=product_collection&order_by=recent&q=t+shirt&celebrity=&occasion=&price=&product-type=clothing")
+    def get_vogue(self, webD, path):
+        webD.get("https://www.vogue.in/vogue-closet/?closet=vogue_closet&filter_type=product_collection&order_by=recent&q=t+shirt&celebrity=&occasion=&price=&product-type=clothing")
 
-	img_links = []
-	i = 0
-	while(i < 2):
-		try:
-		    productInfoList = webD.find_elements_by_class_name("product-wrapper")
-		    for el in productInfoList:
-		        pp1 = el.find_element_by_tag_name("a")
-		        pp2 = pp1.find_element_by_tag_name("img")
-		        img_links.append(pp2.get_property("src"))
-		    page_nav = webD.find_element_by_class_name("pagination")
-		    butts = page_nav.find_elements_by_tag_name("a")[-1]
-		    butts.click()
-		except:
-		    pass
-		i += 1
-
-
-	df_vogue = pd.DataFrame(columns=["img_links"])
-	df_vogue["img_links"] = img_links
+        img_links = []
+        i = 0
+        while(i < 2):
+            try:
+                productInfoList = webD.find_elements_by_class_name("product-wrapper")
+                for el in productInfoList:
+                    pp1 = el.find_element_by_tag_name("a")
+                    pp2 = pp1.find_element_by_tag_name("img")
+                    img_links.append(pp2.get_property("src"))
+                page_nav = webD.find_element_by_class_name("pagination")
+                butts = page_nav.find_elements_by_tag_name("a")[-1]
+                butts.click()
+            except:
+                pass
+            i += 1
 
 
-	df_vogue.to_csv(os.path.join(path,"vogue.csv"))
+        df_vogue = pd.DataFrame(columns=["img_links"])
+        df_vogue["img_links"] = img_links
+
+
+        df_vogue.to_csv(os.path.join(path,"vogue.csv"))
