@@ -138,23 +138,3 @@ def scrape(driver):
                     f'//*[@id="post-{id}"]/div[3]/ul[2]/li[2]/a').text
             except:
                 pass
-
-            try:
-                productType = driver.find_element_by_xpath(
-                    f'//*[@id="post-{id}"]/div[3]/ul[4]/li[2]/a').text
-            except:
-                pass
-            
-            w.writerow([heading,
-                        author,
-                        datetime,
-                        below_title_summary,
-                        img,
-                        description,
-                        img2,
-                        description2,
-                        img3,
-                        description3,
-                        celebrity,
-                        price,
-                        occasion])
