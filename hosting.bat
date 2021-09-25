@@ -16,5 +16,6 @@ git checkout main -- server_setup.sh
 git checkout main -- nginx.conf
 git checkout main -- nginx.conf
 git checkout main -- start.sh
+git checkout main -- uwsgi.ini
 git commit -m "v0.1"
 git push
