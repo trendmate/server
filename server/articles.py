@@ -42,7 +42,7 @@ def sort_articles():
         data = pd.DataFrame()
         res = list(res)
 
-        for x in range(0, 10):
+        for x in range(0, 5):
             kw_list = [res[x],]
             pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='IN', gprop='')
             data[res[x]] = pytrends.interest_over_time()[res[x]]
