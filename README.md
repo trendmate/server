@@ -1,3 +1,10 @@
+## Run server
+
+```
+uwsgi --module server.wsgi
+uwsgi --socket /tmp/uwsgi.socket --wsgi-file wsgi.py --uid www-data --gid www-data -H /usr/local/lib/python3.8
+```
+
 ## Hosting
 
 ```
@@ -45,7 +52,7 @@ pip install -r requirements.txt
 ### Server
 
 ```
-flask run
+flask run --host=0.0.0.0 --port=80
 ```
 
 ### tests
