@@ -1,3 +1,14 @@
+## Git LFS
+
+```
+git lfs track "*.zip"
+git lfs ls-files
+java -jar bfg.jar --convert-to-git-lfs '*.{extensions}' --no-blob-protection
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+git push --all --force
+```
+
 ## Run server
 
 ```
