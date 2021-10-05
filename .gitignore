@@ -133,3 +133,4 @@ dmypy.json
 site/
 .vscode/
 imgs/
+.instagramy_cache/
