@@ -83,4 +83,4 @@ def scrape_amazon(driver):
     data_tuples = list(zip(brand_names,Description,Rating,Discount,Category,Rate,Link))
 
     df_1=pd.DataFrame(data_tuples,columns=['Brand','Description','Reviews','Discount','Category','Rating','Links'])
-    df_1.to_csv('../data/products_data/cloud_scraped_amazon.csv', mode='a', header=False)
+    df_1.to_csv('./data/products_data/cloud_scraped_amazon.csv', mode='a', header=False)

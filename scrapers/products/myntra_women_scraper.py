@@ -10,6 +10,7 @@ global parentURL, indianAndFusionWear, WesternWear, headers, rows
 
 
 def init():
+    global parentURL, indianAndFusionWear, WesternWear, headers, rows
 
     parentURL = 'https://www.myntra.com/'
 
@@ -47,6 +48,7 @@ def init():
 
 
 def scrape(driver):
+    global parentURL, indianAndFusionWear, WesternWear, headers, rows
     for li in [indianAndFusionWear, WesternWear]:
         for i in li:
 
@@ -154,7 +156,7 @@ def scrape(driver):
 
     driver.quit()
 
-    with open('../data/products_data/myntra_women.csv', 'a', newline='') as f:
+    with open('./data/products_data/myntra_women.csv', 'a', newline='') as f:
         w = csv.writer(f)
         w.writerow(headers)
         w.writerows(rows)
