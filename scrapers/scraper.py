@@ -1,13 +1,25 @@
 import selenium
-from selenium import webdriver as wb
+from pyvirtualdisplay import Display
+from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-from selenium.webdriver.chrome.options import Options
-from products.myntra_scraper import get_myntra
+import scrapers.products.amazon_scraper as amazon
+import scrapers.products.myntra_men_scraper as myntra_men
+import scrapers.products.myntra_women_scraper as myntra_women
+import scrapers.blogs.vogue as vogue
 
-chrome_options = Options()
-# chrome_options.add_argument("--disable-extensions")
-# chrome_options.add_argument("--disable-gpu")
-# chrome_options.add_argument("--headless")
-webD = wb.Chrome(ChromeDriverManager().install(),options=chrome_options)
-get_myntra(webD, './data/image_links')
+global display, driver
 
+def init():
+    display = Display(visible=0, size=(1920, 1080)).start()
+    global driver
+    driver=webdriver.Chrome(ChromeDriverManager().install())
+    # amazon.init()
+    # myntra_men.init()
+    # myntra_women.init()
+    vogue.init()
+
+def scrape():
+    vogue.scrape(driver)
+    # myntra_men.scrape(driver)
+    # amazon.scrape_amazon(driver)
+    # myntra_women.scrape(driver)

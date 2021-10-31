@@ -132,3 +132,5 @@ dmypy.json
 *.env
 site/
 .vscode/
+imgs/
+.instagramy_cache/

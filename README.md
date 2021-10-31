@@ -1,3 +1,43 @@
+## Git LFS
+
+```
+git lfs track "*.zip"
+git lfs ls-files
+java -jar bfg.jar --convert-to-git-lfs '*.{extensions}' --no-blob-protection
+git reflog expire --expire=now --all
+git gc --prune=now --aggressive
+git push --all --force
+```
+
+## Run server
+
+```
+uwsgi --module server.wsgi
+uwsgi --socket /tmp/uwsgi.socket --wsgi-file wsgi.py --uid www-data --gid www-data -H /usr/local/lib/python3.8
+```
+
+## Hosting
+
+```
+git checkout main
+git pull 
+git checkout hosting
+git checkout master -- config
+git checkout master -- models
+git checkout master -- scrapers
+git checkout master -- server
+git checkout master -- utils
+git checkout master -- .gitignore
+git checkout master -- app.py
+git checkout master -- .Procfile
+git checkout master -- requirements.txt
+git checkout master -- runtime.txt
+git checkout master -- server_requirements.txt
+git checkout master -- server_setup.sh
+git commit -m "v0.1"
+git push
+```
+
 ## Git workflow
 
 ```
@@ -23,7 +63,7 @@ pip install -r requirements.txt
 ### Server
 
 ```
-flask run
+flask run --host=0.0.0.0 --port=80
 ```
 
 ### tests
@@ -52,6 +92,8 @@ pytest
 ```
 
 ## Datasets
+
+### [Scraped Images](https://drive.google.com/file/d/1WI95J600swejVn2-6vzhFRuxKfZa_gQh/view?usp=sharing)
 
 ### [Amazon](https://nijianmo.github.io/amazon/index.html)
 

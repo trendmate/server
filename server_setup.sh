@@ -1,0 +1,1 @@
+sed 's/#.*//' server_requirements.txt | xargs sudo apt-get install

@@ -27,9 +27,12 @@
 
 ## Server
 
-- [ ]  hosting
+- [ ]  create different branch with config, models, scrapers, server, app.py, procfile, requirements.txt, runtime, server_req, server_setup
+- [ ]  host to PEC server
+- [ ]  create auto hosting scripts
 
 ## Tests
 
 - [ ] Server
 - [ ] Scrapers 
+
