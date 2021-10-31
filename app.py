@@ -83,10 +83,9 @@ def delete_collection(coll_ref, batch_size):
 def flow():
     global IMG_SIZE, filename
     scraper.scrape()
-    # amazon_df = pd.read_csv('./data/products_data/cloud_scraped_amazon.csv')
+    amazon_df = pd.read_csv('./data/products_data/cloud_scraped_amazon.csv')
     myntra_men_df = pd.read_csv('./data/products_data/myntra_men.csv')
-    # myntra_women_df = pd.read__csv('./data/products/myntra_women.csv')
-    print(myntra_men_df['image'])
+    myntra_women_df = pd.read__csv('./data/products/myntra_women.csv')
     download_image(myntra_men_df.iloc[0]['image'])
 
     img = tf.keras.preprocessing.image.load_img(
@@ -136,14 +135,14 @@ def add_articles():
 
 
 def init():
-    # global model
-    # model = tf.keras.models.load_model('./models/vgg/')
+    global model
+    model = tf.keras.models.load_model('./models/vgg/')
     scraper.init()
-    # flow()
-    # scheduler = BackgroundScheduler()
-    # scheduler.add_job(func=flow, trigger="interval", hours=24)
-    # scheduler.start()
-    # atexit.register(lambda: scheduler.shutdown())
+    flow()
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=flow, trigger="interval", hours=24)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 
 if __name__ == '__main__':
