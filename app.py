@@ -145,6 +145,7 @@ def add_products():
 
 def add_articles():
     res = articles.sort_articles()
+    res.to_csv('./data/blog_data/articles_sorted.csv')
     print(res)
     for x in range(0, len(res)):
         doc_ref = db.collection(u'temp_articles').document()
@@ -155,7 +156,7 @@ def add_articles():
             u'medias': [{u'mediaId': '', u'type': 0, u'url': res.iloc[x]['img'], u'title': '', }, {u'mediaId': '', u'type': 0, u'url': res.iloc[x]['img2'], u'title': '', },],
             u'share_no': 0,
             u'tags': [],
-            u'description': res.iloc[x]['description'] + '\n' + res.iloc[x]['description2'] + '\n' + res.iloc[x]['below_title_summary'],
+            u'description': str(res.iloc[x]['description']) + '\n' + str(res.iloc[x]['description2']) + '\n' + str(res.iloc[x]['below_title_summary']),
             u'products': [],
             u'trendiness': res.iloc[x]['trendiness'],
         })
@@ -166,7 +167,7 @@ def stringToTimeStamp(s):
     return mqtt_timestamp
 
 def flow():
-    # add_products()
+    add_products()
     add_articles()
 
 
@@ -174,17 +175,17 @@ def init():
     global encoder, pm_model, model
     print("Tf Version : " + tf.__version__)
     model = tf.keras.models.load_model('./models/image_model.h5')
-    # encoder = tf.keras.models.load_model('encoder', compile=False)
-    # pm_model = tf.keras.models.load_model('pm_model', compile=False)
-    # scraper.init()
-    # scheduler = BackgroundScheduler()
-    # scheduler.add_job(func=flow, trigger="interval", hours=24)
-    # scheduler.start()
-    # atexit.register(lambda: scheduler.shutdown())
+    encoder = tf.keras.models.load_model('encoder', compile=False)
+    pm_model = tf.keras.models.load_model('pm_model', compile=False)
+    scraper.init()
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=flow, trigger="interval", hours=24)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 
 if __name__ == '__main__':
     init()
-    # scraper.scrape()
+    scraper.scrape()
     flow()
     app.run()

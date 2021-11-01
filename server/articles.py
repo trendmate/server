@@ -24,7 +24,8 @@ def sort_articles():
     df = pd.read_csv('./data/blog_data/vogue.csv')
     text= []
     for index, row in df.iterrows():
-        strin = row['heading'] + ' ' + row['author'] + ' ' + row['below_title_summary'] + ' ' + row['description'] + ' ' + row['description2']
+        print(index)
+        strin = str(row['heading']) + ' ' + str(row['author']) + ' ' + str(row['below_title_summary']) + ' ' + str(row['description']) + ' ' + str(row['description2'])
         text += [strin,]
     
     result = []
@@ -42,10 +43,21 @@ def sort_articles():
         data = pd.DataFrame()
         res = list(res)
         for x in range(0, 5):
-            print(x)
-            kw_list = [res[x],]
-            pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='IN', gprop='')
-            data[res[x]] = pytrends.interest_over_time()[res[x]]
+            try:
+                print(x)
+                kw_list = [res[x],]
+                pytrends.build_payload(kw_list, cat=0, timeframe='today 5-y', geo='IN', gprop='')
+                data[res[x]] = pytrends.interest_over_time()[res[x]]
+            except requests.exceptions.Timeout:
+                # Maybe set up for a retry, or continue in a retry loop
+                pass
+            except requests.exceptions.TooManyRedirects:
+                # Tell the user their URL was bad and try a different one
+                pass
+            except requests.exceptions.RequestException as e:
+                # catastrophic error. bail.
+                # raise SystemExit(e)
+                pass
         changes = []
 
         for word in data:

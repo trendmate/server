@@ -16,14 +16,14 @@ def init():
 
     topWearUrls = [
         'men-tshirts',
-        # 'men-casual-shirts',
-        # 'men-formal-shirts',
-        # 'men-sweat-shirts',
-        # 'men-sweaters',
-        # 'men-jackets',
-        # 'men-blazers',
-        # 'men-suits',
-        # 'rain-jacket',
+        'men-casual-shirts',
+        'men-formal-shirts',
+        'men-sweat-shirts',
+        'men-sweaters',
+        'men-jackets',
+        'men-blazers',
+        'men-suits',
+        'rain-jacket',
     ]
 
     indianAndFestiveWearURL = [
@@ -49,8 +49,7 @@ def init():
 
 def scrape(driver):
     global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows
-    for li in [topWearUrls]:
-    # indianAndFestiveWearURL, bottomWear]:
+    for li in [topWearUrls, indianAndFestiveWearURL, bottomWear]:
         for i in li:
 
             url = parentURL + i
