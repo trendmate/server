@@ -41,9 +41,6 @@ def sort_articles():
     for res in result:
         data = pd.DataFrame()
         res = list(res)
-        
-        print(res)
-
         for x in range(0, 5):
             print(x)
             kw_list = [res[x],]

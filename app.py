@@ -1,6 +1,8 @@
 # server
 from flask import Flask, request
 import os
+import re
+from dateutil import parser
 
 # AI
 import tensorflow as tf
@@ -97,26 +99,34 @@ def add_products():
             .format(np.argmax(score), 100 * np.max(score))
         )
 
-        doc_ref = db.collection(u'products').document()
+        review_no = list(map(int, re.findall(
+            r'\d+', str(row['reviews'])))) if row['reviews'] is not None else 0
+        review_no = review_no[0] if len(review_no) > 0 else 0
+
+        price = row['price'] if isinstance(
+            row['price'], float) else float(row['price'][4:])
+
+        doc_ref = db.collection(u'temp_products').document()
         doc_ref.set({
             u'brand': row['brand'],
             u'category': '',
             u'description': row['description'],
             u'image': row['image'],
-            u'title': row['title'],
-            u'price': row['price'][4:],
+            u'title': row['description'],
+            u'price': price,
             u'rating': row['rating'],
-            u'review_no': row['reviews'][0:row['reviews'].index('k')],
+            u'review_no': review_no,
+            # [int(i) for i in row['reviews'].split() if i.isdigit()][0],
+            # row['reviews'][0:row['reviews'].index('k')],011
             u'share_no': 0,
-            u'trendiness': np.argmax(score), # pm_prob,
-            u'confidence': 100 * np.max(score),
+            u'trendiness': int(np.argmax(score)),  # pm_prob,
+            u'confidence': float(100 * np.max(score)),
             u'url': row['url'],
             u'demographic': 'men',
             u'store': 'myntra',
             u'occasion': '',
         })
 
-        
         # download_image(row['image'])
         # img = mpimg.imread(filepath + row['image'].split('/').pop())
         # img = resize(img, (320, 192, 3))
@@ -131,35 +141,39 @@ def add_products():
         # pm_prob = pm_model.predict(np.array([flattened_enc]))
         # pm_prob = pm_prob[0][0]
         # print("The predicted popularity is", pm_prob)
-        
 
 
 def add_articles():
     res = articles.sort_articles()
     print(res)
     for x in range(0, len(res)):
-        doc_ref = db.collection(u'articles').document()
+        doc_ref = db.collection(u'temp_articles').document()
         doc_ref.set({
             u'title': res.iloc[x]['heading'],
             u'by': res.iloc[x]['author'],
-            u'dateTime': res.iloc[x]['datetime'],
-            u'medias': [res.iloc[x]['img'],res.iloc[x]['img2'],],
+            u'dateTime': firestore.SERVER_TIMESTAMP,
+            u'medias': [{u'mediaId': '', u'type': 0, u'url': res.iloc[x]['img'], u'title': '', }, {u'mediaId': '', u'type': 0, u'url': res.iloc[x]['img2'], u'title': '', },],
             u'share_no': 0,
             u'tags': [],
-            u'description': res.iloc[x]['description'] + '\n' + res.iloc[x]['description2'] + '\n' +res.iloc[x]['below_title_summary'],
+            u'description': res.iloc[x]['description'] + '\n' + res.iloc[x]['description2'] + '\n' + res.iloc[x]['below_title_summary'],
             u'products': [],
             u'trendiness': res.iloc[x]['trendiness'],
         })
 
+def stringToTimeStamp(s):
+    mqtt_timestamp = parser.parse(s)
+    mqtt_timestamp_rfc3339 = rfc3339(mqtt_timestamp, utc=True, use_system_timezone=False)
+    return mqtt_timestamp
 
 def flow():
-    add_products()
-    # add_articles()
+    # add_products()
+    add_articles()
 
 
 def init():
     global encoder, pm_model, model
-    model = tf.keras.models.load_model('./models/image_classification_model/', compile=False)
+    print("Tf Version : " + tf.__version__)
+    model = tf.keras.models.load_model('./models/image_model.h5')
     # encoder = tf.keras.models.load_model('encoder', compile=False)
     # pm_model = tf.keras.models.load_model('pm_model', compile=False)
     # scraper.init()
