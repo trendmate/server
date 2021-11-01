@@ -1,5 +1,6 @@
 # server
 from flask import Flask, request
+import os
 
 # AI
 import tensorflow as tf
@@ -36,6 +37,9 @@ IMG_SIZE = (160, 160)
 filename = './data/images/'
 
 app = Flask(__name__)
+
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 
 
 def download_image(image_url):
@@ -96,20 +100,38 @@ def add_products():
         doc_ref = db.collection(u'products').document()
         doc_ref.set({
             u'brand': row['brand'],
-            u'category': row['category'],
+            u'category': '',
             u'description': row['description'],
             u'image': row['image'],
             u'title': row['title'],
-            u'price': row['price'],
+            u'price': row['price'][4:],
             u'rating': row['rating'],
-            u'review_no': len(row['reviews']),
+            u'review_no': row['reviews'][0:row['reviews'].index('k')],
             u'share_no': 0,
-            u'trendiness': np.argmax(score).item(),
+            u'trendiness': np.argmax(score), # pm_prob,
+            u'confidence': 100 * np.max(score),
             u'url': row['url'],
-            u'demographic': '',
-            u'store': '',
+            u'demographic': 'men',
+            u'store': 'myntra',
             u'occasion': '',
         })
+
+        
+        # download_image(row['image'])
+        # img = mpimg.imread(filepath + row['image'].split('/').pop())
+        # img = resize(img, (320, 192, 3))
+
+        # #Find the encoding for it
+        # temp_arr = []
+        # temp_arr.append(img)
+        # img_enc = encoder.predict(np.array(temp_arr))
+        # flattened_enc = img_enc.flatten()
+
+        # #Predict its popularity
+        # pm_prob = pm_model.predict(np.array([flattened_enc]))
+        # pm_prob = pm_prob[0][0]
+        # print("The predicted popularity is", pm_prob)
+        
 
 
 def add_articles():
@@ -132,21 +154,23 @@ def add_articles():
 
 def flow():
     add_products()
-    add_articles()
+    # add_articles()
 
 
 def init():
-    global model
-    model = tf.keras.models.load_model('./models/vgg/')
-    scraper.init()
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=flow, trigger="interval", hours=24)
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
+    global encoder, pm_model, model
+    model = tf.keras.models.load_model('./models/image_classification_model/', compile=False)
+    # encoder = tf.keras.models.load_model('encoder', compile=False)
+    # pm_model = tf.keras.models.load_model('pm_model', compile=False)
+    # scraper.init()
+    # scheduler = BackgroundScheduler()
+    # scheduler.add_job(func=flow, trigger="interval", hours=24)
+    # scheduler.start()
+    # atexit.register(lambda: scheduler.shutdown())
 
 
 if __name__ == '__main__':
     init()
-    scraper.scrape()
-    # flow()
+    # scraper.scrape()
+    flow()
     app.run()
