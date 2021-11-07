@@ -134,3 +134,6 @@ site/
 .vscode/
 imgs/
 .instagramy_cache/
+
+config/
+config/trend-mate-firebase-adminsdk-b6xj0-a86d62f4f5.json

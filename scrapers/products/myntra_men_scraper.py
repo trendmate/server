@@ -15,9 +15,9 @@ def init():
 
 
     topWearUrls = [
-        'men-tshirts',
-        'men-casual-shirts',
-        'men-formal-shirts',
+        # 'men-tshirts',
+        # 'men-casual-shirts',
+        # 'men-formal-shirts',
         'men-sweat-shirts',
         'men-sweaters',
         'men-jackets',
@@ -155,7 +155,7 @@ def scrape(driver):
                 driver.back()
                 time.sleep(3)
 
-    with open('./data/products_data/myntra_men.csv', 'a', newline='\n') as f:
+    with open('./data/products_data/myntra_men_new.csv', 'w', newline='\n') as f:
         w = csv.writer(f)
-        # w.writerow(headers)
+        w.writerow(headers)
         w.writerows(rows)

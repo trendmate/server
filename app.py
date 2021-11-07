@@ -78,54 +78,110 @@ def delete_collection(coll_ref, batch_size):
 
 def add_products():
     global IMG_SIZE, filename
-    amazon_df = pd.read_csv('./data/products_data/cloud_scraped_amazon.csv')
-    myntra_men_df = pd.read_csv('./data/products_data/myntra_men.csv')
-    myntra_women_df = pd.read_csv('./data/products_data/myntra_women.csv')
+    amazon_df = pd.read_csv('./data/products_data/Amazon_Women.csv')
+    # myntra_men_df = pd.read_csv('./data/products_data/myntra_men.csv')
+    # myntra_women_df = pd.read_csv('./data/products_data/myntra_women.csv')
 
-    for index, row in myntra_men_df.iterrows():
 
-        download_image(row['image'])
-        img = tf.keras.preprocessing.image.load_img(
-            filename + row['image'].split('/').pop(), target_size=IMG_SIZE
-        )
-        img_array = tf.keras.preprocessing.image.img_to_array(img)
-        img_array = tf.expand_dims(img_array, 0)  # Create a batch
+    for index, row in amazon_df.iterrows():
+        try:
+            download_image(row['Links'])
+            img = tf.keras.preprocessing.image.load_img(
+                filename + row['Links'].split('/').pop(), target_size=IMG_SIZE
+            )
+            img_array = tf.keras.preprocessing.image.img_to_array(img)
+            img_array = tf.expand_dims(img_array, 0)  # Create a batch
 
-        predictions = model.predict(img_array)
-        score = tf.nn.softmax(predictions[0])
+            predictions = model.predict(img_array)
+            score = tf.nn.softmax(predictions[0])
 
-        print(
-            "This image most likely belongs to {} with a {:.2f} percent confidence."
-            .format(np.argmax(score), 100 * np.max(score))
-        )
+            print(
+                "This image most likely belongs to {} with a {:.2f} percent confidence."
+                .format(np.argmax(score), 100 * np.max(score))
+            )
 
-        review_no = list(map(int, re.findall(
-            r'\d+', str(row['reviews'])))) if row['reviews'] is not None else 0
-        review_no = review_no[0] if len(review_no) > 0 else 0
+            review_no = list(map(int, re.findall(
+                r'\d+', str(row['Reviews'])))) if row['Reviews'] is not None else 0
+            review_no = review_no[0] if len(review_no) > 0 else 0
 
-        price = row['price'] if isinstance(
-            row['price'], float) else float(row['price'][4:])
+            perc = int((row['Discount'][(row['Discount'].index('(')+1):(len(row['Discount'])-2)]).replace(',',''))
+            dis = int((row['Discount'][(row['Discount'].index('₹')+1):(row['Discount'].index(' ',(row['Discount'].index(' ')+1)))]).replace(',',''))
 
-        doc_ref = db.collection(u'temp_products').document()
-        doc_ref.set({
-            u'brand': row['brand'],
-            u'category': '',
-            u'description': row['description'],
-            u'image': row['image'],
-            u'title': row['description'],
-            u'price': price,
-            u'rating': row['rating'],
-            u'review_no': review_no,
-            # [int(i) for i in row['reviews'].split() if i.isdigit()][0],
-            # row['reviews'][0:row['reviews'].index('k')],011
-            u'share_no': 0,
-            u'trendiness': int(np.argmax(score)),  # pm_prob,
-            u'confidence': float(100 * np.max(score)),
-            u'url': row['url'],
-            u'demographic': 'men',
-            u'store': 'myntra',
-            u'occasion': '',
-        })
+            price = dis/perc*100
+
+            # price = row['price'] if isinstance(
+            #     row['price'], float) else float(row['price'][4:])
+
+            doc_ref = db.collection(u'temp_products').document()
+            doc_ref.set({
+                u'brand': row['Brand'],
+                u'category': row['Category'],
+                u'description': row['Description'],
+                u'image': row['Links'],
+                u'title': row['Description'],
+                u'price': price,
+                u'rating': row['Rating'],
+                u'review_no': review_no,
+                # [int(i) for i in row['reviews'].split() if i.isdigit()][0],
+                # row['reviews'][0:row['reviews'].index('k')],011
+                u'share_no': 0,
+                u'trendiness': int(np.argmax(score)),  # pm_prob,
+                u'confidence': float(100 * np.max(score)),
+                u'url': '',
+                u'demographic': 'men',
+                u'store': 'amazon',
+                u'occasion': '',
+            })
+
+            print(index)
+        
+        except:
+            pass
+
+    # for index, row in amazon_df.iterrows():
+
+    #     download_image(row['image'])
+    #     img = tf.keras.preprocessing.image.load_img(
+    #         filename + row['image'].split('/').pop(), target_size=IMG_SIZE
+    #     )
+    #     img_array = tf.keras.preprocessing.image.img_to_array(img)
+    #     img_array = tf.expand_dims(img_array, 0)  # Create a batch
+
+    #     predictions = model.predict(img_array)
+    #     score = tf.nn.softmax(predictions[0])
+
+    #     print(
+    #         "This image most likely belongs to {} with a {:.2f} percent confidence."
+    #         .format(np.argmax(score), 100 * np.max(score))
+    #     )
+
+    #     review_no = list(map(int, re.findall(
+    #         r'\d+', str(row['reviews'])))) if row['reviews'] is not None else 0
+    #     review_no = review_no[0] if len(review_no) > 0 else 0
+
+    #     price = row['price'] if isinstance(
+    #         row['price'], float) else float(row['price'][4:])
+
+    #     doc_ref = db.collection(u'temp_products').document()
+    #     doc_ref.set({
+    #         u'brand': row['brand'],
+    #         u'category': '',
+    #         u'description': row['description'],
+    #         u'image': row['image'],
+    #         u'title': row['description'],
+    #         u'price': price,
+    #         u'rating': row['rating'],
+    #         u'review_no': review_no,
+    #         # [int(i) for i in row['reviews'].split() if i.isdigit()][0],
+    #         # row['reviews'][0:row['reviews'].index('k')],011
+    #         u'share_no': 0,
+    #         u'trendiness': int(np.argmax(score)),  # pm_prob,
+    #         u'confidence': float(100 * np.max(score)),
+    #         u'url': row['url'],
+    #         u'demographic': 'men',
+    #         u'store': 'myntra',
+    #         u'occasion': '',
+    #     })
 
         # download_image(row['image'])
         # img = mpimg.imread(filepath + row['image'].split('/').pop())
@@ -168,24 +224,24 @@ def stringToTimeStamp(s):
 
 def flow():
     add_products()
-    add_articles()
+    # add_articles()
 
 
 def init():
     global encoder, pm_model, model
-    print("Tf Version : " + tf.__version__)
-    model = tf.keras.models.load_model('./models/image_model.h5')
-    encoder = tf.keras.models.load_model('encoder', compile=False)
-    pm_model = tf.keras.models.load_model('pm_model', compile=False)
+    # print("Tf Version : " + tf.__version__)
+    # model = tf.keras.models.load_model('./models/image_model.h5')
+    # encoder = tf.keras.models.load_model('encoder', compile=False)
+    # pm_model = tf.keras.models.load_model('pm_model', compile=False)
     scraper.init()
-    scheduler = BackgroundScheduler()
-    scheduler.add_job(func=flow, trigger="interval", hours=24)
-    scheduler.start()
-    atexit.register(lambda: scheduler.shutdown())
+    # scheduler = BackgroundScheduler()
+    # scheduler.add_job(func=flow, trigger="interval", hours=24)
+    # scheduler.start()
+    # atexit.register(lambda: scheduler.shutdown())
 
 
 if __name__ == '__main__':
     init()
     scraper.scrape()
-    flow()
+    # flow()
     app.run()

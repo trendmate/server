@@ -154,9 +154,7 @@ def scrape(driver):
                 driver.back()
                 time.sleep(3)
 
-    driver.quit()
-
-    with open('./data/products_data/myntra_women.csv', 'a', newline='') as f:
+    with open('./data/products_data/myntra_women_new.csv', 'w', newline='\n') as f:
         w = csv.writer(f)
         w.writerow(headers)
         w.writerows(rows)
