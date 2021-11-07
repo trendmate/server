@@ -239,9 +239,18 @@ def init():
     # scheduler.start()
     # atexit.register(lambda: scheduler.shutdown())
 
+def addBrands():
+    myntra_men_new = pd.read_csv('./data/products_data/myntra_men_scraped_data_complete.csv')
+    for index, row in myntra_men_new.iterrows():
+        print(row)
+        doc_ref = db.collection(u'brands').document(row['brand'])
+        doc_ref.set({
+            u'name':row['brand']
+        })
 
 if __name__ == '__main__':
-    init()
-    scraper.scrape()
+    # init()
+    # scraper.scrape()
     # flow()
+    addBrands()
     app.run()
