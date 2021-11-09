@@ -22,11 +22,18 @@ RUN git checkout hosting
 RUN virtualenv env
 RUN . env/bin/activate
 RUN pip install --no-cache-dir --user -r requirements.txt
-RUN pip install --default-timeout=1000 --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-2.6.0-cp38-cp38-manylinux2010_x86_64.whl
+# RUN pip install --default-timeout=1000 --upgrade https://storage.googleapis.com/tensorflow/linux/gpu/tensorflow_gpu-2.6.0-cp38-cp38-manylinux2010_x86_64.whl
+RUN pip install tensorflow
 RUN pip install uwsgi
+RUN pip install pillow
 RUN pip install statsmodels 
 RUN pip install spacy 
+RUN sudo apt install libpython3.8-dev
 RUN python3 -m spacy download en_core_web_sm
+RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+RUN echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' | sudo tee /etc/apt/sources.list.d/google-chrome.list
+RUN sudo apt-get update 
+RUN sudo apt-get install google-chrome-stable
 WORKDIR /server
 COPY ./server/nginx.conf /etc/nginx
 RUN chmod +x ./start.sh
