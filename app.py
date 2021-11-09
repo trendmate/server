@@ -229,18 +229,18 @@ def flow():
 
 def init():
     global encoder, pm_model, model
-    # print("Tf Version : " + tf.__version__)
-    # model = tf.keras.models.load_model('./models/image_model.h5')
-    # encoder = tf.keras.models.load_model('encoder', compile=False)
-    # pm_model = tf.keras.models.load_model('pm_model', compile=False)
+    print("Tf Version : " + tf.__version__)
+    model = tf.keras.models.load_model('./models/image_model.h5')
+    encoder = tf.keras.models.load_model('encoder', compile=False)
+    pm_model = tf.keras.models.load_model('pm_model', compile=False)
     scraper.init()
-    # scheduler = BackgroundScheduler()
-    # scheduler.add_job(func=flow, trigger="interval", hours=24)
-    # scheduler.start()
-    # atexit.register(lambda: scheduler.shutdown())
+    scheduler = BackgroundScheduler()
+    scheduler.add_job(func=flow, trigger="interval", hours=24)
+    scheduler.start()
+    atexit.register(lambda: scheduler.shutdown())
 
 def addBrands():
-    myntra_men_new = pd.read_csv('./data/products_data/myntra_men_scraped_data_complete.csv')
+    myntra_men_new = pd.read_csv('./data/products_data/myntra_women_without_ratings.csv')
     for index, row in myntra_men_new.iterrows():
         print(row)
         doc_ref = db.collection(u'brands').document(row['brand'])
@@ -248,9 +248,17 @@ def addBrands():
             u'name':row['brand']
         })
 
+def addCats():
+    myntra_men_new = pd.read_csv('./data/products_data/myntra_women_without_ratings.csv')
+    for index, row in myntra_men_new.iterrows():
+        print(row)
+        doc_ref = db.collection(u'categories').document(row['category'])
+        doc_ref.set({
+            u'name':row['category']
+        })
+
 if __name__ == '__main__':
-    # init()
-    # scraper.scrape()
-    # flow()
-    addBrands()
+    init()
+    scraper.scrape()
+    flow()
     app.run()
