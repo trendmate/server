@@ -6,18 +6,18 @@ import time
 # DRIVER_PATH = 'E:\ChromeDriver\chromedriver_win32\chromedriver.exe'
 # driver = webdriver.Chrome(executable_path=DRIVER_PATH)
 
-global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows
+global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows, categories
 
 def init():
-    global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows
+    global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows, categories
         
     parentURL = 'https://www.myntra.com/'
 
 
     topWearUrls = [
-        # 'men-tshirts',
-        # 'men-casual-shirts',
-        # 'men-formal-shirts',
+        'men-tshirts',
+        'men-casual-shirts',
+        'men-formal-shirts',
         'men-sweat-shirts',
         'men-sweaters',
         'men-jackets',
@@ -30,7 +30,7 @@ def init():
         'men-kurtas',
         'sherwani',
         'nehru-jackets',
-        'dhoti'
+        'dhoti',
     ]
 
     bottomWear = [
@@ -38,8 +38,29 @@ def init():
         'men-casual-trousers',
         'men-formal-trousers',
         'mens-shorts',
-        'men-trackpants'
+        'men-trackpants',
     ]
+
+    categories = {
+        'men-tshirts': 'tshirts',
+        'men-casual-shirts': 'casual-shirts',
+        'men-formal-shirts': 'formal-shirts',
+        'men-sweat-shirts': 'sweat-shirts',
+        'men-sweaters': 'sweaters',
+        'men-jackets': 'jackets',
+        'men-blazers': 'blazers',
+        'men-suits': 'suits',
+        'rain-jacket': 'rain-jacket',
+        'men-kurtas': 'kurtas',
+        'sherwani': 'sherwani',
+        'nehru-jackets': 'nehru-jackets',
+        'dhoti': 'dhoti',
+        'men-jeans': 'jeans',
+        'men-casual-trousers': 'casual-trousers',
+        'men-formal-trousers': 'formal-trousers',
+        'mens-shorts': 'shorts',
+        'men-trackpants': 'trackpants',
+    }
 
     headers = ['gender', 'category', 'image',
             'brand', 'description', 'price', 'discount', 'url', 'rating', 'reviews']
@@ -48,7 +69,8 @@ def init():
     rows = []
 
 def scrape(driver):
-    global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows
+    global parentURL, topWearUrls, indianAndFestiveWearURL, bottomWear, headers, rows, categories
+    total = 0
     for li in [topWearUrls, indianAndFestiveWearURL, bottomWear]:
         for i in li:
 
@@ -63,8 +85,9 @@ def scrape(driver):
             for product in products:
                 print(k)
                 k += 1
+                total += 1
                 gender = "M"
-                category = i
+                category = categories[i]
                 imageURL = ''
                 brand = ''
                 description = ''
@@ -120,7 +143,7 @@ def scrape(driver):
 
             print("done")
 
-            for i in range(k):
+            for i in range(total - k, total):
                 try:
                     driver.get(URLS[i])
                 except:
