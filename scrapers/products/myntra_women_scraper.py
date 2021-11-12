@@ -6,14 +6,13 @@ import time
 # DRIVER_PATH = 'E:\ChromeDriver\chromedriver_win32\chromedriver.exe'
 # driver = webdriver.Chrome(executable_path=DRIVER_PATH)
 
-global parentURL, indianAndFusionWear, WesternWear, headers, rows
+global parentURL, indianAndFusionWear, WesternWear, headers, rows, categories
 
 
 def init():
-    global parentURL, indianAndFusionWear, WesternWear, headers, rows
+    global parentURL, indianAndFusionWear, WesternWear, headers, rows, categories
 
     parentURL = 'https://www.myntra.com/'
-
 
     indianAndFusionWear = [
         'women-kurtas-kurtis-suits',
@@ -41,6 +40,29 @@ def init():
         'women-blazers-waistcoats',
     ]
 
+    categories = {
+        'women-kurtas-kurtis-suits': 'kurtas-kurtis-suits',
+        'ethnic-tops': 'ethnic-tops',
+        'women-ethnic-wear': 'ethnic-wear',
+        'women-ethnic-bottomwear': 'ethnic-bottomwear',
+        'skirts-palazzos': 'skirts-palazzos',
+        'saree': 'saree',
+        'dress-material': 'dress-material',
+        'lehenga-choli': 'lehenga-choli',
+        'dupatta-shawl': 'dupatta-shawl',
+        'women-jackets': 'jackets',
+        'dresses': 'dresses',
+        'jumpsuits': 'jumpsuits',
+        'tops': 'tops',
+        'women-jeans': 'jeans',
+        'women-trousers': 'trousers',
+        'women-shorts-skirts': 'shorts-skirts',
+        'women-shrugs': 'shrugs',
+        'women-sweaters-sweatshirts': 'sweaters-sweatshirts',
+        'women-jackets-coats': 'jackets-coats',
+        'women-blazers-waistcoats': 'blazers-waistcoats',
+    }
+
     headers = ['gender', 'category', 'image',
                'brand', 'description', 'price', 'discount', 'url', 'rating', 'reviews']
 
@@ -48,7 +70,8 @@ def init():
 
 
 def scrape(driver):
-    global parentURL, indianAndFusionWear, WesternWear, headers, rows
+    global parentURL, indianAndFusionWear, WesternWear, headers, rows, categories
+    total = 0
     for li in [indianAndFusionWear, WesternWear]:
         for i in li:
 
@@ -64,7 +87,7 @@ def scrape(driver):
                 print(k)
                 k += 1
                 gender = "F"
-                category = i
+                category = categories[i]
                 imageURL = ''
                 brand = ''
                 description = ''
@@ -119,7 +142,7 @@ def scrape(driver):
 
             print("done")
 
-            for i in range(k):
+            for i in range(total - k, total):
                 try:
                     driver.get(URLS[i])
                 except:
